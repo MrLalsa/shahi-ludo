@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Shahi Ludo — Play Online with a Friend</title>
+<meta name="description" content="A royal, browser-based Ludo you can play with a friend online — no server, no install, just open and play.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<!-- Minimal inline SVG favicon: a gold gem, matching the theme -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><polygon points=%2250,6 90,38 74,94 26,94 10,38%22 fill=%22%23c6a15b%22/></svg>">
+</head>
+<body>
+
+<div class="bg-mandala" aria-hidden="true"></div>
+
+<div id="app">
+
+  <!-- ============================== LOBBY ============================== -->
+  <section id="screen-lobby" class="screen active">
+    <div class="lobby-card">
+
+      <!-- Step: landing -->
+      <div id="lobby-landing" class="lobby-step">
+        <h1 class="game-title">Shahi Ludo</h1>
+        <p class="tagline">A royal game of gems, dice &amp; destiny</p>
+
+        <div class="field-block">
+          <label class="field-label" for="player-name">Your name</label>
+          <input class="text-input" id="player-name" type="text" placeholder="e.g. Lalit" maxlength="18" autocomplete="off">
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-go-create">Create Game</button>
+          <button class="btn btn-secondary" id="btn-go-join">Join Game</button>
+        </div>
+        <p class="hint-text">No server needed — Shahi Ludo connects you and your friend's browsers directly (peer-to-peer). Create a game, share the link, and play.</p>
+      </div>
+
+      <!-- Step: create → pick colour -->
+      <div id="lobby-create-setup" class="lobby-step" hidden>
+        <div class="back-row">
+          <button class="back-btn" id="btn-back-from-create" aria-label="Back">←</button>
+          <h2 style="font-size:1.15rem;">Choose your gem</h2>
+        </div>
+        <div class="color-grid" id="create-color-grid"></div>
+        <button class="btn btn-primary" id="btn-create-room" style="margin-top:22px;">Create Room</button>
+      </div>
+
+      <!-- Step: hosting / waiting for guest -->
+      <div id="lobby-hosting-wait" class="lobby-step" hidden>
+        <h2 style="text-align:center; font-size:1.2rem;">Your room is ready</h2>
+        <div class="room-code-box">
+          <div class="room-code-text" id="room-code-text">…</div>
+        </div>
+        <button class="btn btn-primary" id="btn-copy-link">Copy Invite Link</button>
+        <p class="hint-text" id="copy-feedback" style="text-align:center; min-height: 1.2em;"></p>
+        <div class="waiting-row">
+          <span class="spinner-dot"></span><span class="spinner-dot"></span><span class="spinner-dot"></span>
+          <span>Waiting for your friend to join…</span>
+        </div>
+      </div>
+
+      <!-- Step: join → enter code -->
+      <div id="lobby-join-enter-code" class="lobby-step" hidden>
+        <div class="back-row">
+          <button class="back-btn" id="btn-back-from-join-enter" aria-label="Back">←</button>
+          <h2 style="font-size:1.15rem;">Enter room code</h2>
+        </div>
+        <div class="field-block">
+          <input class="text-input" id="room-code-input" type="text" placeholder="e.g. ujnxns" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <button class="btn btn-primary" id="btn-connect">Connect</button>
+        <p class="error-text" id="join-enter-error"></p>
+      </div>
+
+      <!-- Step: join → connecting -->
+      <div id="lobby-join-connecting" class="lobby-step" hidden>
+        <div class="waiting-row" style="justify-content:center; padding: 30px 0;">
+          <span class="spinner-dot"></span><span class="spinner-dot"></span><span class="spinner-dot"></span>
+          <span>Connecting…</span>
+        </div>
+      </div>
+
+      <!-- Step: join → pick colour -->
+      <div id="lobby-join-setup" class="lobby-step" hidden>
+        <h2 style="text-align:center; font-size:1.15rem; margin-bottom:18px;">Choose your gem</h2>
+        <div class="color-grid" id="join-color-grid"></div>
+        <button class="btn btn-primary" id="btn-join-game" style="margin-top:22px;">Join Game</button>
+      </div>
+
+      <div id="lobby-error-box"></div>
+    </div>
+  </section>
+
+  <!-- ============================== GAME ============================== -->
+  <section id="screen-game" class="screen">
+    <div class="top-actions">
+      <button class="icon-btn" id="btn-mute" aria-label="Mute sound">🔊</button>
+      <button class="icon-btn" id="btn-leave" aria-label="Leave game">✕</button>
+    </div>
+
+    <div class="game-header">
+      <div class="player-badge" id="badge-player-0"></div>
+      <div class="player-badge" id="badge-player-1"></div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board-inner" id="board-inner">
+        <div class="board-grid" id="board-grid"></div>
+        <div class="tokens-layer" id="tokens-layer"></div>
+        <div class="fx-layer" id="fx-layer"></div>
+      </div>
+    </div>
+
+    <div class="game-footer">
+      <div class="dice-zone">
+        <div class="dice-3d-wrap" id="dice-3d-wrap">
+          <div class="dice-3d" id="dice-3d">
+            <div class="die-face face-front" data-n="1">
+              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+            </div>
+            <div class="die-face face-back" data-n="6">
+              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+            </div>
+            <div class="die-face face-right" data-n="2">
+              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+            </div>
+            <div class="die-face face-left" data-n="5">
+              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+            </div>
+            <div class="die-face face-top" data-n="3">
+              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+            </div>
+            <div class="die-face face-bottom" data-n="4">
+              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+            </div>
+          </div>
+        </div>
+        <div class="status-message" id="status-message">—</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============================== MODALS ============================== -->
+<div class="modal-backdrop" id="modal-win">
+  <div class="modal-box">
+    <div class="win-crown">👑</div>
+    <h2 id="win-title">You win!</h2>
+    <p id="win-sub">Every gem made it home.</p>
+    <button class="btn btn-primary" id="btn-new-game">Play Again</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-disconnect">
+  <div class="modal-box">
+    <h2>Connection lost</h2>
+    <p id="disconnect-text">Your friend disconnected.</p>
+    <button class="btn btn-primary" id="btn-disconnect-ok">Back to Lobby</button>
+  </div>
+</div>
+
+<!-- ============================== SCRIPTS ============================== -->
+<script src="lib/peerjs.min.js"></script>
+<script src="js/board-data.js"></script>
+<script src="js/game-engine.js"></script>
+<script src="js/network.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
