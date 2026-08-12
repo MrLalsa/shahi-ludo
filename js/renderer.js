@@ -35,13 +35,16 @@ function cellRole(row, col) {
 // ---------------------------------------------------------------------------
 function buildBoardDOM(gridEl) {
   gridEl.innerHTML = '';
-  const startIndexSet = new Set(COLOR_KEYS.map(k => COLORS[k].startIndex));
+  const startIndexToColor = {};
+  COLOR_KEYS.forEach(k => { startIndexToColor[COLORS[k].startIndex] = k; });
   for (let r = 0; r < BOARD_SIZE; r++) {
     for (let c = 0; c < BOARD_SIZE; c++) {
       const { cls, ringIndex } = cellRole(r, c);
       const div = document.createElement('div');
       div.className = 'cell ' + cls;
-      if (ringIndex !== undefined && startIndexSet.has(ringIndex)) div.classList.add('start-marker');
+      if (ringIndex !== undefined && startIndexToColor[ringIndex]) {
+        div.classList.add('start-' + startIndexToColor[ringIndex]);
+      }
       gridEl.appendChild(div);
     }
   }
@@ -270,15 +273,15 @@ class DiceRenderer {
     this.faces.bottom.dataset.n = order[4];
 
     const spins = 1 + Math.floor(Math.random() * 2);
-    this.cube.style.setProperty('--final-x', (spins * 360 - 24) + 'deg');
-    this.cube.style.setProperty('--final-y', (spins * 360 + 35) + 'deg');
+    this.cube.style.setProperty('--final-x', (spins * 360) + 'deg');
+    this.cube.style.setProperty('--final-y', (spins * 360) + 'deg');
     this.cube.classList.remove('rolling');
     // force reflow so the animation restarts cleanly
     void this.cube.offsetWidth;
     this.cube.classList.add('rolling');
     await sleep(900);
     this.cube.classList.remove('rolling');
-    this.cube.style.transform = `rotateX(-24deg) rotateY(35deg)`;
+    this.cube.style.transform = `rotateX(0deg) rotateY(0deg)`;
   }
 }
 
