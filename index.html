@@ -104,50 +104,54 @@
       <button class="icon-btn" id="btn-leave" aria-label="Leave game">✕</button>
     </div>
 
-    <div class="game-header">
-      <div class="player-badge" id="badge-player-0"></div>
-      <div class="player-badge" id="badge-player-1"></div>
-    </div>
-
-    <div class="board-wrap">
-      <div class="board-inner" id="board-inner">
-        <div class="board-grid" id="board-grid"></div>
-        <div class="tokens-layer" id="tokens-layer"></div>
-        <div class="fx-layer" id="fx-layer"></div>
+    <div class="game-layout">
+      <div class="board-wrap">
+        <div class="board-inner" id="board-inner">
+          <div class="board-grid" id="board-grid"></div>
+          <div class="tokens-layer" id="tokens-layer"></div>
+          <div class="fx-layer" id="fx-layer"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="game-footer">
-      <div class="dice-zone">
-        <div class="dice-3d-wrap" id="dice-3d-wrap">
-          <div class="dice-3d" id="dice-3d">
-            <div class="die-face face-front" data-n="1">
-              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
-              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+      <div class="side-panel">
+        <div class="game-header">
+          <div class="player-badge" id="badge-player-0"></div>
+          <div class="player-badge" id="badge-player-1"></div>
+        </div>
+
+        <div class="game-footer">
+          <div class="dice-zone">
+            <div class="dice-3d-wrap" id="dice-3d-wrap">
+              <div class="dice-3d" id="dice-3d">
+                <div class="die-face face-front" data-n="1">
+                  <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+                  <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+                </div>
+                <div class="die-face face-back" data-n="6">
+                  <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+                  <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+                </div>
+                <div class="die-face face-right" data-n="2">
+                  <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+                  <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+                </div>
+                <div class="die-face face-left" data-n="5">
+                  <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+                  <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+                </div>
+                <div class="die-face face-top" data-n="3">
+                  <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+                  <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+                </div>
+                <div class="die-face face-bottom" data-n="4">
+                  <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
+                  <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
+                </div>
+              </div>
             </div>
-            <div class="die-face face-back" data-n="6">
-              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
-              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
-            </div>
-            <div class="die-face face-right" data-n="2">
-              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
-              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
-            </div>
-            <div class="die-face face-left" data-n="5">
-              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
-              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
-            </div>
-            <div class="die-face face-top" data-n="3">
-              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
-              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
-            </div>
-            <div class="die-face face-bottom" data-n="4">
-              <div class="pip f1"></div><div class="pip f2"></div><div class="pip f3"></div>
-              <div class="pip f4"></div><div class="pip f5"></div><div class="pip f6"></div><div class="pip f7"></div>
-            </div>
+            <div class="status-message" id="status-message">—</div>
           </div>
         </div>
-        <div class="status-message" id="status-message">—</div>
       </div>
     </div>
   </section>
